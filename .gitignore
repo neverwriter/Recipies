@@ -1,0 +1,17 @@
+# Ignore Gradle project-specific cache directory
+.gradle
+
+# Ignore IntelliJ files and directories
+.idea
+contacts.iml
+
+# Ignore Gradle build output directory
+build
+
+# Ignore out directory
+out
+/src/main/java/contacts/Main2.java
+
+
+# Ignore Academy tests
+/test/CinemaTests.java
