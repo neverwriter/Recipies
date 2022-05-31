@@ -1,28 +1,38 @@
 package recipes.controller;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import recipes.model.Recipe;
-
-import java.util.concurrent.ConcurrentLinkedQueue;
+import recipes.repository.map.MapRecipeRepository;
 
 @RestController
 public class RecipeController {
 
-    ConcurrentLinkedQueue<Recipe> recipes = new ConcurrentLinkedQueue<>();
+    MapRecipeRepository mapRecipeRepository;
 
-    @PostMapping("/api/recipe")
-    public void postRecipe(@RequestBody Recipe recipe){
-        recipes.clear();
-        recipes.add(recipe);
+    @Autowired
+    public RecipeController(MapRecipeRepository mapRecipeRepository) {
+        this.mapRecipeRepository = mapRecipeRepository;
     }
 
-    @GetMapping("/api/recipe")
-    public ResponseEntity<?> getRecipe(){
-        return new ResponseEntity<>(recipes.peek(), HttpStatus.OK);
+    @PostMapping("/api/recipe/new")
+    public ResponseEntity<?> postRecipe(@RequestBody Recipe recipe){
+        Integer id = mapRecipeRepository.getNewId();
+        mapRecipeRepository.addRecipe(id, recipe);
+        String response = "{\"id\":" +
+                id +
+                "}";
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    @GetMapping("/api/recipe/{id}")
+    public ResponseEntity<?> getRecipe(@PathVariable Integer id){
+        if(mapRecipeRepository.isRecipeExists(id)) {
+            return new ResponseEntity<>(mapRecipeRepository.getRecipeById(id), HttpStatus.OK);
+        }
+
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 }
