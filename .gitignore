@@ -14,4 +14,4 @@ out
 
 
 # Ignore Academy tests
-/test/CinemaTests.java
+/test/RecipesApplicationTest.java
