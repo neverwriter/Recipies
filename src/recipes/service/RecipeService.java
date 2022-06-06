@@ -32,4 +32,8 @@ public class RecipeService {
     public boolean existsById(Integer id){
         return recipeRepository.existsById(id);
     }
+
+    public void deleteRecipeById(Integer id){
+        recipeRepository.deleteById(id);
+    }
 }

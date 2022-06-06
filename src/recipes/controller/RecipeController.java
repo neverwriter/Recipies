@@ -36,4 +36,14 @@ public class RecipeController {
 
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
+
+    @DeleteMapping("/api/recipe/{id}")
+    public ResponseEntity<?> deleteRecipe (@PathVariable Integer id){
+        if(recipeService.existsById(id)) {
+            recipeService.deleteRecipeById(id);
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
+
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
 }
