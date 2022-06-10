@@ -1,16 +1,21 @@
 package recipes.service.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import lombok.*;
 
+
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
+
 import java.util.List;
 
 @Entity
-@Getter
-@Setter
+@Getter @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@JsonSerialize(using = RecipeSerializer.class)
 @Table(name = "recipes")
 public class Recipe {
 
@@ -21,25 +26,35 @@ public class Recipe {
     private Integer id;
 
     @Column
+    @NotBlank
     private String name;
 
+    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @JoinColumn(name = "category_id")
+    private Category category;
+
     @Column
+    @NotBlank
     private String description;
 
     @ElementCollection
     @CollectionTable(name = "ingredients", joinColumns = @JoinColumn(name = "recipe_id"))
     @Column(name="ingredient")
-    private List<String> ingredients;
+    @Size(min=1)
+    private List<@NotBlank String> ingredients;
 
     @ElementCollection
     @CollectionTable(name = "directions", joinColumns = @JoinColumn(name = "recipe_id"))
     @Column(name="direction")
-    private List<String> directions;
+    @Size(min=1)
+    private List<@NotBlank String> directions;
 
-    public Recipe(String name, String description, List<String> ingredients, List<String> directions) {
+
+    public Recipe(String name, String description, List<String> ingredients, List<String> directions, Category category) {
         this.name = name;
         this.description = description;
         this.ingredients = ingredients;
         this.directions = directions;
+        this.category = category;
     }
 }
