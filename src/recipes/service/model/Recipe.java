@@ -1,14 +1,14 @@
 package recipes.service.model;
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import lombok.*;
+import org.hibernate.annotations.Cascade;
 
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
@@ -21,9 +21,10 @@ public class Recipe {
 
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)
-    @JsonIgnore
     @Column(name = "recipe_id")
     private Integer id;
+
+    private LocalDateTime date;
 
     @Column
     @NotBlank
@@ -56,5 +57,6 @@ public class Recipe {
         this.ingredients = ingredients;
         this.directions = directions;
         this.category = category;
+        this.date = LocalDateTime.now();
     }
 }

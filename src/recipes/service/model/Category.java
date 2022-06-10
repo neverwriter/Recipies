@@ -21,7 +21,7 @@ public class Category {
     @Column(name = "category_id")
     private Integer id;
 
-    @Column
+    @Column(unique = true)
     @NotBlank
     private String category;
 

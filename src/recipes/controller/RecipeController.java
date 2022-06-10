@@ -8,6 +8,7 @@ import recipes.service.RecipeService;
 import recipes.service.model.Recipe;
 
 import javax.validation.Valid;
+import java.util.Optional;
 
 
 /**
@@ -46,10 +47,30 @@ public class RecipeController {
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
+    @GetMapping("/api/recipe/search")
+    public ResponseEntity<?> searchRecipe(@RequestParam Optional<String> name, @RequestParam Optional<String> category) {
+        String response = "[]";
+
+        if(name.isPresent() && category.isEmpty()){
+            response = name.get();
+        return new ResponseEntity<>(response, HttpStatus.OK);
+        }
+
+        if(category.isPresent() && name.isEmpty()){
+            response = category.get();
+            return new ResponseEntity<>(response, HttpStatus.OK);
+        }
+
+        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+
+
+    }
+
     @DeleteMapping("/api/recipe/{id}")
     public ResponseEntity<?> deleteRecipe(@PathVariable Integer id) {
         if (recipeService.existsById(id)) {
             recipeService.deleteRecipeById(id);
+
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
 
