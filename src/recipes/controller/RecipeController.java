@@ -1,13 +1,16 @@
 package recipes.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import recipes.service.RecipeService;
+import recipes.service.CategoryService;
 import recipes.service.model.Recipe;
 
 import javax.validation.Valid;
+import java.util.List;
 import java.util.Optional;
 
 
@@ -18,14 +21,21 @@ import java.util.Optional;
 @RestController
 public class RecipeController {
 
-    @Autowired
     RecipeService recipeService;
+
+    CategoryService categoryService;
+
+    @Autowired
+    public RecipeController(RecipeService recipeService, CategoryService categoryService) {
+        this.recipeService = recipeService;
+        this.categoryService = categoryService;
+    }
 
     @PostMapping("/api/recipe/new")
     public ResponseEntity<?> postRecipe(@Valid @RequestBody Recipe recipe) {
 
         //If add to pass platform test in normal app @Size(min=1) annotation work fine
-        if (recipe.getDirections()!= null
+        if (recipe.getDirections() != null
                 && recipe.getIngredients() != null
                 && recipe.getIngredients().size() >= 1
                 && recipe.getDirections().size() >= 1) {
@@ -51,14 +61,15 @@ public class RecipeController {
     public ResponseEntity<?> searchRecipe(@RequestParam Optional<String> name, @RequestParam Optional<String> category) {
         String response = "[]";
 
-        if(name.isPresent() && category.isEmpty()){
-            response = name.get();
-        return new ResponseEntity<>(response, HttpStatus.OK);
-        }
-
-        if(category.isPresent() && name.isEmpty()){
+        if (name.isPresent() && category.isEmpty()) {
             response = category.get();
             return new ResponseEntity<>(response, HttpStatus.OK);
+        }
+
+        if (category.isPresent() && name.isEmpty()) {
+
+            List<?> recipeList = categoryService.findAllByCategory(category.get());
+            return new ResponseEntity<>(recipeList, HttpStatus.OK);
         }
 
         return new ResponseEntity<>(HttpStatus.BAD_REQUEST);

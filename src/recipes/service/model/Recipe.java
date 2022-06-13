@@ -30,8 +30,8 @@ public class Recipe {
     @NotBlank
     private String name;
 
-    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
-    @JoinColumn(name = "category_id")
+    @ManyToOne(cascade = {CascadeType.MERGE})
+    @JoinColumn(name = "category")
     private Category category;
 
     @Column

@@ -11,7 +11,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Getter @Setter
+@Getter
+@Setter
 @NoArgsConstructor
 public class Category {
 
@@ -29,7 +30,7 @@ public class Category {
     @OneToMany(mappedBy = "category")
     private List<Recipe> recipes = new ArrayList<>();
 
-    public Category(String category){
+    public Category(String category) {
         this.category = category;
     }
 }
