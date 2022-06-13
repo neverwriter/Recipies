@@ -22,7 +22,7 @@ public class Category {
     @Column(name = "category_id")
     private Integer id;
 
-    @Column(unique = true)
+    @Column
     @NotBlank
     private String category;
 

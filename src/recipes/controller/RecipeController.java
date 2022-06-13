@@ -10,6 +10,8 @@ import recipes.service.CategoryService;
 import recipes.service.model.Recipe;
 
 import javax.validation.Valid;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 
@@ -62,13 +64,17 @@ public class RecipeController {
         String response = "[]";
 
         if (name.isPresent() && category.isEmpty()) {
-            response = category.get();
-            return new ResponseEntity<>(response, HttpStatus.OK);
+
+            List<Recipe> recipeList = recipeService.findByNameContainingIgnoreCase(name.get());
+            recipeList.sort(Comparator.comparing(Recipe::getDate).reversed());
+            return new ResponseEntity<>(recipeList, HttpStatus.OK);
         }
 
         if (category.isPresent() && name.isEmpty()) {
 
-            List<?> recipeList = categoryService.findAllByCategory(category.get());
+            List<Recipe> recipeList = categoryService.findAllByCategory(category.get());
+            recipeList.sort(Comparator.comparing(Recipe::getDate).reversed());
+
             return new ResponseEntity<>(recipeList, HttpStatus.OK);
         }
 

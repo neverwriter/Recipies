@@ -15,4 +15,6 @@ public interface RecipeRepository extends CrudRepository<Recipe, Integer> {
   @Query("select r from Recipe r where r.category = ?1")
   List<Recipe> findRecipesByCategory(Category category);
 
+  List<Recipe> findByNameContainingIgnoreCase(String name);
+
 }

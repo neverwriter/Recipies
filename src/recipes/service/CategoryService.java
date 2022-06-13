@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import recipes.repository.CategoryRepository;
 import recipes.service.model.Category;
+import recipes.service.model.Recipe;
 
 import java.util.Collections;
 import java.util.List;
@@ -33,7 +34,7 @@ public class CategoryService {
         return categoryRepository.findByCategoryName(category).get().getId();
     }
 
-    public List<?> findAllByCategory(String category){
+    public List<Recipe> findAllByCategory(String category){
 
     Category fetchCategory = categoryRepository.findByCategoryName(category).orElse(null);
 
@@ -42,5 +43,9 @@ public class CategoryService {
         }
          return Collections.EMPTY_LIST;
 
+    }
+
+    public void save (Category category) {
+        categoryRepository.save(category);
     }
 }

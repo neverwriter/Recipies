@@ -29,7 +29,12 @@ public class RecipeService {
     public void save(Recipe recipe){
 
         if(categoryService.existByCategory(recipe.getCategory().getCategory())){
+
             recipe.getCategory().setId(categoryService.getId(recipe.getCategory().getCategory()));
+
+        } else {
+
+            categoryService.save(recipe.getCategory());
         }
 
         recipeRepository.save(recipe);
@@ -51,5 +56,8 @@ public class RecipeService {
        return recipeRepository.findRecipesByCategory(category);
     }
 
+    public List<Recipe> findByNameContainingIgnoreCase(String recipeName){
+        return recipeRepository.findByNameContainingIgnoreCase(recipeName);
+    }
 
 }

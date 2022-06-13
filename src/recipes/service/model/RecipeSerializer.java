@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.databind.ser.std.StdSerializer;
 import java.io.IOException;
+import java.time.LocalDateTime;
 
 /**
  * Custom serialization class to change display of category field
@@ -24,6 +25,7 @@ public class RecipeSerializer extends StdSerializer<Recipe> {
         gen.writeStartObject();
         gen.writeStringField("name", value.getName());
         gen.writeStringField("category", value.getCategory().getCategory());
+        gen.writeObjectField("date", value.getDate());
         gen.writeStringField("description", value.getDescription());
         gen.writeObjectField("ingredients", value.getIngredients());
         gen.writeObjectField("directions", value.getDirections());
