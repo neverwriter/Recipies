@@ -4,7 +4,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import recipes.repository.CategoryRepository;
 import recipes.service.model.Category;
@@ -30,6 +29,10 @@ public class CategoryService {
         return categoryRepository.findByCategoryName(category).isPresent();
     }
 
+    public Category findById(Integer id){
+        return categoryRepository.findById(id).orElseThrow(() -> new IllegalStateException("category with id " + id + " does not exists."));
+    }
+
     public Integer getId (String category) {
         return categoryRepository.findByCategoryName(category).get().getId();
     }
@@ -47,5 +50,9 @@ public class CategoryService {
 
     public void save (Category category) {
         categoryRepository.save(category);
+    }
+
+    public Category findByCategoryName (String category){
+        return categoryRepository.findByCategoryName(category).orElseThrow(() -> new IllegalStateException("category with name " + category + " does not exists."));
     }
 }

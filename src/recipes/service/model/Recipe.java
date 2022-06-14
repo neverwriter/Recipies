@@ -1,13 +1,13 @@
 package recipes.service.model;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import lombok.*;
-import org.hibernate.annotations.Cascade;
-
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
-
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -24,7 +24,7 @@ public class Recipe {
     @Column(name = "recipe_id")
     private Integer id;
 
-    private LocalDateTime date;
+
 
     @Column
     @NotBlank
@@ -33,6 +33,9 @@ public class Recipe {
     @ManyToOne(cascade = {CascadeType.MERGE})
     @JoinColumn(name = "category")
     private Category category;
+
+    @Column
+    private LocalDateTime date;
 
     @Column
     @NotBlank

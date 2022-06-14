@@ -1,16 +1,14 @@
 package recipes.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import recipes.service.RecipeService;
 import recipes.service.CategoryService;
+import recipes.service.RecipeService;
 import recipes.service.model.Recipe;
 
 import javax.validation.Valid;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
@@ -18,6 +16,7 @@ import java.util.Optional;
 
 /**
  * End-point for manage CRUD operation of <code>Recipes</code>
+ *
  * @author Patryk Lewczuk
  */
 @RestController
@@ -79,6 +78,19 @@ public class RecipeController {
         }
 
         return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+
+
+    }
+
+    @PutMapping("api/recipe/{id}")
+    public ResponseEntity<?> updateRecipe(@PathVariable Integer id, @RequestBody Recipe recipe) {
+        if (recipeService.existsById(id)) {
+
+            recipeService.updateRecipe(id, recipe);
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
+
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 
 
     }
