@@ -36,10 +36,7 @@ public class RecipeController {
     public ResponseEntity<?> postRecipe(@Valid @RequestBody Recipe recipe) {
 
         //If add to pass platform test in normal app @Size(min=1) annotation work fine
-        if (recipe.getDirections() != null
-                && recipe.getIngredients() != null
-                && recipe.getIngredients().size() >= 1
-                && recipe.getDirections().size() >= 1) {
+        if (recipeValidator(recipe)) {
             Recipe recipeToSave = new Recipe(recipe.getName(), recipe.getDescription(), recipe.getIngredients(), recipe.getDirections(), recipe.getCategory());
             recipeService.save(recipeToSave);
 
@@ -83,15 +80,19 @@ public class RecipeController {
     }
 
     @PutMapping("api/recipe/{id}")
-    public ResponseEntity<?> updateRecipe(@PathVariable Integer id, @RequestBody Recipe recipe) {
-        if (recipeService.existsById(id)) {
+    public ResponseEntity<?> updateRecipe(@PathVariable Integer id, @Valid @RequestBody Recipe recipe) {
 
-            recipeService.updateRecipe(id, recipe);
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        if (recipeValidator(recipe)) {
+
+            if (recipeService.existsById(id)) {
+
+                recipeService.updateRecipe(id, recipe);
+                return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+            }
+
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-
-        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-
+        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 
     }
 
@@ -104,5 +105,14 @@ public class RecipeController {
         }
 
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
+
+    private boolean recipeValidator(Recipe recipe) {
+        return recipe.getDirections() != null
+                && recipe.getIngredients() != null
+                && recipe.getIngredients().size() >= 1
+                && recipe.getDirections().size() >= 1
+                && recipe.getCategory() != null
+                && !recipe.getCategory().getCategory().isBlank();
     }
 }

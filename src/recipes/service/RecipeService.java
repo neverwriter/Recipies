@@ -84,6 +84,7 @@ public class RecipeService {
         recipeForUpdate.setIngredients(recipe.getIngredients());
         recipeForUpdate.setDirections(recipe.getDirections());
 
+        recipeRepository.save(recipeForUpdate);
     }
 
 }

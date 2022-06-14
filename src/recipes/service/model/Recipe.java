@@ -7,6 +7,7 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -24,14 +25,13 @@ public class Recipe {
     @Column(name = "recipe_id")
     private Integer id;
 
-
-
     @Column
     @NotBlank
     private String name;
 
     @ManyToOne(cascade = {CascadeType.MERGE})
     @JoinColumn(name = "category")
+    @NotNull
     private Category category;
 
     @Column

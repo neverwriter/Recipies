@@ -9,7 +9,7 @@ import recipes.repository.CategoryRepository;
 import recipes.service.model.Category;
 import recipes.service.model.Recipe;
 
-import java.util.Collections;
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -39,12 +39,15 @@ public class CategoryService {
 
     public List<Recipe> findAllByCategory(String category){
 
-    Category fetchCategory = categoryRepository.findByCategoryName(category).orElse(null);
+    List<Category> categoryList = categoryRepository.findByCategoryIgnoreCase(category);
 
-    if (fetchCategory != null) {
-            return fetchCategory.getRecipes();
+    List<Recipe> recipeList = new ArrayList<>();
+
+        for (Category fetchedCategory: categoryList) {
+            recipeList.addAll(fetchedCategory.getRecipes());
         }
-         return Collections.EMPTY_LIST;
+
+    return recipeList;
 
     }
 
